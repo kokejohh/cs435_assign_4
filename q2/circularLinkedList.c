@@ -34,7 +34,7 @@ void addAtFront(int client, int length, char *line)
 void addAtLast(int client, int length, char *line)
 {
 	hnode *tmp = (hnode *)malloc(sizeof(hnode));
-	
+
 	tmp->client = client;
 	tmp->length = length;
 	tmp->line = (char *)malloc((length + 1) * sizeof(char));
@@ -75,7 +75,7 @@ void deleteLast()
 		head = tmp->next = tail->next;
 		tail = tmp->next;
 		free(tmp->line);
-		free(tmp);	
+		free(tmp);
 	}
 }
 

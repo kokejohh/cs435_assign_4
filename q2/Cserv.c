@@ -59,15 +59,25 @@ int main(int argc, char *argv[]){
 	FD_SET(lis_fd, &base_rfds); //add value of lis_fd into base_rfds
 	fdmax = lis_fd;
 
+	FD_SET(fileno(stdin), &base_rfds); //add value of fileno(stdin) into base_rfds
+
 	while(1){
     	    memcpy(&rfds, &base_rfds, sizeof(fd_set)); //copy base_rfds to rfds
+	    printf("Cserv> "); //show command line prompt "Cserv> "
+	    fflush(stdout); //clear buffer
 	    if (select(fdmax+1, &rfds, NULL, NULL, NULL) < 0) { //select block until something happend with fd
 		printf("select error!\n");
 		exit(1);
 	    }
+//	    printf("Cserv> \n");
 	    for (i = 0; i <= fdmax; i++) {
 		if (FD_ISSET(i, &rfds)) { //check if there is i in set of rfds
-		    if (i == lis_fd) { //if i is a listening_fd
+		    if(i == fileno(stdin)){
+			if(strcmp(fgets(line, MAXLINE, stdin), "viewlist\n") == 0) {
+                                viewList(); // show history
+                        }
+		    }
+		    else if (i == lis_fd) { //if i is a listening_fd
 			for (j = 0; j < MAXCONN; j++) {
 			    if (conn_fd[j] == EMPTY) { //if conn_fd[j] is not connected
 				cindex = j; break; //let cindex = j then end of loop
@@ -131,7 +141,7 @@ int main(int argc, char *argv[]){
 			    } else {
 				deleteFirst(); //delete node in history
 			    }
-			    viewList(); // show history
+			    viewList();
          		}
 		    }
 		}
