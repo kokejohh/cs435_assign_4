@@ -78,8 +78,8 @@ int main(int argc, char *argv[]){
 	    for (i = 0; i <= fdmax; i++) {
 		if (FD_ISSET(i, &rfds)) { //check if there is i in set of rfds
 		    if(i == fileno(stdin)){
-			if(strcmp(fgets(line, MAXLINE, stdin), "viewlist\n") == 0) {
-                                viewList(); // show history
+			if(strcmp(fgets(line, MAXLINE, stdin), "viewlist\n") == 0) { //if input from stdin is "viewlist"
+                                viewList(); //show history
                         }
 		    }
 		    else if (i == lis_fd) { //if i is a listening_fd
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]){
 		    	} else {
 		            char str[116];
 		 	    sprintf(str, "\ncli-%03d says: %s", conn_id[cindex], line);
-			    sendclient sc;
+			    sendclient sc; //Declare sc of type sendclient
 			    sc.client = conn_id[cindex];
 			    sc.length = strlen(line);
 			    strcpy(sc.line,line);
