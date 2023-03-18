@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
 		printf("select error!\n");
 		exit(1);
 	    }
-//	    printf("Cserv> \n");
+
 	    for (i = 0; i <= fdmax; i++) {
 		if (FD_ISSET(i, &rfds)) { //check if there is i in set of rfds
 		    if(i == fileno(stdin)){
