@@ -84,7 +84,7 @@ void viewList()
 	if (tail == NULL) printf("\nList i empty\n");
 	else
 	{
-		printf("History message :\n");
+		printf("\33[2K\rHistory message :\n");
 		hnode *tmp = tail->next;
 		do
 		{

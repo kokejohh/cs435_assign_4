@@ -33,6 +33,11 @@
 int lis_fd;
 int conn_fd[MAXCONN], conn_id[MAXCONN];
 struct sockaddr_in serv_addr;
+typedef struct sendclient {
+	int client;
+	int length;
+	char line[MAXLINE];
+} sendclient;
 
 int main(int argc, char *argv[]){
 	int n, i, j, cindex = 0, numOfHis = 0;
@@ -66,7 +71,7 @@ int main(int argc, char *argv[]){
 	    printf("Cserv> "); //show command line prompt "Cserv> "
 	    fflush(stdout); //clear buffer
 	    if (select(fdmax+1, &rfds, NULL, NULL, NULL) < 0) { //select block until something happend with fd
-		printf("select error!\n");
+		printf("\nselect error!\n");
 		exit(1);
 	    }
 
@@ -84,10 +89,10 @@ int main(int argc, char *argv[]){
 			    }
 			}
 			if ((conn_fd[cindex] = accept(lis_fd, NULL, NULL)) < 0) { //use accept() to create connection, if no connection
-				printf("Accept: Error occured\n"); //show error message
+				printf("\nAccept: Error occured\n"); //show error message
 				exit(1);
 			}
-          		printf("a new connection %d are wating id ...\n", conn_fd[cindex]); //if it connected, show message a new connection
+          		printf("\33[2K\ra new connection %d are wating id ...\n", conn_fd[cindex]); //if it connected, show message a new connection
           		FD_SET(conn_fd[cindex] , &base_rfds); //add value of conn_fd[cindex] into base_rfds
           		if(conn_fd[cindex] > fdmax){
 		       	    fdmax = conn_fd[cindex];
@@ -111,7 +116,7 @@ int main(int argc, char *argv[]){
 				n = 0;
 			    } else {
 			    	conn_id[cindex] = tmp_id;
-			    	printf("fd(%d) receive cli-%03d\n", conn_fd[cindex], conn_id[cindex]);
+			    	printf("\33[2K\rfd(%d) receive cli-%03d\n", conn_fd[cindex], conn_id[cindex]);
 			    	continue; //start new loop
 			    }
 			} else {
@@ -119,20 +124,24 @@ int main(int argc, char *argv[]){
 			}
 			if (n <= 0) {
 			    if (n == 0) { //client close connection
-				printf("read: close connection %d\n", i);
+				printf("\nread: close connection %d\n", i);
 				FD_CLR(i, &base_rfds); //clear i from base_rfds
 				close(i); //close file description i
     				conn_fd[cindex] = conn_id[cindex] = EMPTY;
 		            } else {
-				printf("read: Error occured\n");
+				printf("\nread: Error occured\n");
  				exit(1);
 		            }
 		    	} else {
 		            char str[116];
 		 	    sprintf(str, "\ncli-%03d says: %s", conn_id[cindex], line);
+			    sendclient sc;
+			    sc.client = conn_id[cindex];
+			    sc.length = strlen(line);
+			    strcpy(sc.line,line);
 			    for(j = 0; j < MAXCONN; j++) {
-				if (conn_fd[j] != EMPTY && conn_fd[j] != i) {
-				    write(conn_fd[j], str, n); //send message to client
+				if (conn_fd[j] != EMPTY) {
+				    write(conn_fd[j], &sc, sizeof(sc)); //send message to client
 				}
 			    }
 			    addAtLast(conn_id[cindex], strlen(line), line); //add node in history
