@@ -8,7 +8,7 @@ RM = rm -f
 
 all: ${OBJS}
 	${CC} Cserv.c -o Cserv ${OBJS}
-	${CC} Dcli.c -o Dcli
+	${CC} Dcli.c -o Dcli ${OBJS}
 clean:
 	${RM} ${OBJS}
 fclean: clean
