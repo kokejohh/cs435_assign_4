@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
 	      	if (numOfHis < MAXHISTORY) {
 		  numOfHis++;
 	      	} else {
-	          deleteFirst();	
+	          deleteFirst();
 	      	}
 	      }
 	    }
@@ -125,7 +125,7 @@ int main(int argc, char *argv[]){
 	      if (numOfHis < MAXHISTORY) {
 		numOfHis++;
 	      } else {
-	        deleteFirst();	
+	        deleteFirst();
 	      }
 	    }
 	  }

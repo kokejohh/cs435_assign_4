@@ -116,7 +116,7 @@ int main(int argc, char *argv[]){
 				n = 0;
 			    } else {
 			    	conn_id[cindex] = tmp_id;
-			    	printf("\33[2K\rfd(%d) receive cli-%03d\n", conn_fd[cindex], conn_id[cindex]);
+				printf("\33[2K\rfd(%d) receive cli-%03d\n", conn_fd[cindex], conn_id[cindex]);
 			    	continue; //start new loop
 			    }
 			} else {
@@ -133,14 +133,13 @@ int main(int argc, char *argv[]){
  				exit(1);
 		            }
 		    	} else {
-		            char str[116];
 		 	    sprintf(str, "\ncli-%03d says: %s", conn_id[cindex], line);
 			    sendclient sc; //Declare sc of type sendclient
 			    sc.client = conn_id[cindex];
 			    sc.length = strlen(line);
 			    strcpy(sc.line,line);
 			    for(j = 0; j < MAXCONN; j++) {
-				if (conn_fd[j] != EMPTY) {
+				if (conn_fd[j] != EMPTY && conn_fd[j] != i) {
 				    write(conn_fd[j], &sc, sizeof(sc)); //send message to client
 				}
 			    }
