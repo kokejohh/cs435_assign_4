@@ -133,6 +133,7 @@ int main(int argc, char *argv[]){
  				exit(1);
 		            }
 		    	} else {
+			    char str[1000];
 		 	    sprintf(str, "\ncli-%03d says: %s", conn_id[cindex], line);
 			    sendclient sc; //Declare sc of type sendclient
 			    sc.client = conn_id[cindex];
